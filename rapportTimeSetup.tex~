@@ -1,0 +1,156 @@
+\documentclass[a4paper,11pt]{report}
+% -----------------------------------------------------
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[francais]{babel}
+\usepackage{graphicx,color,caption2}
+\usepackage{epsfig}
+\usepackage{fancyhdr}
+%\usepackage{fancyvrb}
+\usepackage{textcomp}
+\pagestyle{fancy}
+\usepackage{listings}		% pour incorporer des sources
+\usepackage{listingsutf8}		% pour incorporer des sources
+\usepackage[francais]{layout}	% pour obtenir le layout
+\usepackage{fullpage}		% pour obtenir le layout
+\usepackage{makeidx}		% pour créer une table d'index
+%\usepackage{shadow}		% pour faire des encadrements
+% Modification des marges ------------------------------
+\oddsidemargin -4mm 	% Marge de gauche -4mm
+\textwidth 17cm 	% Largeur de gauche = 17cm
+\textheight 22cm 	% Hauteur du texte = 22cm
+\parindent 0cm		% Pas d'indentation de paragraphe
+% -----------------------------------------------------
+\lstset{language={},%C,Assembleur, TeX, tcl, basic, cobol, fortran, logo, make, pascal, perl, prolog, {}
+	literate={â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+		 {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+		 {à}{{\`a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {ù}{{\`u}}1 
+		 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+		 {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+		 {À}{{\`A}}1 {É}{{\'E}}1 {È}{{\`E}}1 {Ù}{{\`U}}1,
+	commentstyle=\scriptsize\ttfamily\slshape, % style des commentaires
+	basicstyle=\scriptsize\ttfamily, % style par défaut
+	keywordstyle=\scriptsize\rmfamily\bfseries,% style des mots-clés
+	backgroundcolor=\color[rgb]{.95,.95,.95}, % couleur de fond : gris clair
+	framerule=0.5pt,% Taille des bords
+	frame=trbl,% Style du cadre
+	frameround=tttt, % Bords arrondis 
+	tabsize=3, % Taille des tabulations
+%	extendedchars=\true, % Incompatible avec utf8 et literate
+	inputencoding=utf8,
+	showspaces=false, % Ne montre pas les espaces 
+	showstringspaces=false, % Ne montre pas les espaces entre ''
+	xrightmargin=0.5cm, % Retrait gauche 
+	xleftmargin=0.5cm, % Retrait droit
+	escapechar=@}  % Caractère d'échappement, permet des commandes latex dans la source
+% -----------------------------------------------------
+
+\title{\emph{\textbf{Rapport Project SysG5 :\\ Time Setup}}}
+\author{42933 Achetouan Mohammed - 45682 Kardillo Younes}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+% Introduction-----------------------------------------------------
+\chapter{
+  \title{Introduction}
+}
+
+L'objectif de ce travail est de créer une application permettant de régler l’heure de différentes machines se trouvant dans un même réseau en utilisant le protocole «\textbf{NTP}».
+\\Tout notre script a été fait en utilisant le langage «\textbf{Python}». Afin que notre application se lance dans des meilleures conditions, nous avons opté pour un environnement  virtuel «\textbf{Python3.6.3}».
+\\
+\\Dans notre application, on donne la possibilité à l’utilisateur de régler l’horloge des machines avec deux méthodes différentes:
+\begin{enumerate}
+  \item Une machine va régler l’heure des différentes machines du serveur.
+  \item Chaque machine demandera à se faire régler son heure à l’aide d’un «\textbf{Cron}».
+\end{enumerate}
+
+% Installation et configuration-----------------------------------------------------
+\chapter{
+  \title{Installation et configuration}
+}
+\section{Installation des différentes dépendances}
+Avant de lancer l'application, il vous faudra installer les différentes dépendances.\\Pour ce faire, vous devrez exécuter le script  \textbf{ installationPython} dont voici la commande :
+\begin{lstlisting} 
+    ./installationPython
+\end{lstlisting}
+
+Une fois l’environnement installé, il faudra activer celui-ci en exécutant cette commande : 
+\begin{lstlisting}
+    source ~/pythonsProjet-SysG5_TimeSetup/python3.6.3/bin/activate
+\end{lstlisting}
+
+\section{Modification des différentes adresses IP}
+En fin, il vous faudra insérer les «\textbf{adresses IP}» des machines du serveur dans le fichier \textbf{ipAdresses} sans préciser celle de la machine qui va lancer le script comme ceci :
+\\ 
+\\ 
+$/Projet-SysG5\_TimeSetup/ipAdresses$
+\begin{lstlisting}
+  192.168.6.130
+  192.168.6.131
+  192.168.6.132
+  192.168.6.133
+\end{lstlisting}
+
+\section{Lancement de l'application}
+Une fois tout installés et préparés, il ne vous reste plus qu'à exécuter la commande ci-dessous qui permettra de lancer l’application :
+\begin{lstlisting} 
+    python TimeSetup.py
+\end{lstlisting}
+ % Vue de l'application-----------------------------------------------------
+\chapter{
+  \title{Vue de l'application}
+}
+Après toutes les différentes installations et configurations, voici la vue au démmarage de l'application :
+\\
+\\
+\includegraphics[width=1\textwidth]{./ressources/images/screenLancementAPK.PNG}
+% Fonctionnement  de l'application-----------------------------------------------------
+\chapter{
+  \title{Fonctionnement de l'application}
+}
+Dans cette section, nous nous intéresserons au fonctionnement de l’application, plus particulièrement aux deux méthodes permettant de régler l'horloge des machines.
+\section{Méthode 1: Envoie par broadcast}
+Lorsque vous entrez le nombre 1, vous réglerez l'heure des différentes machines du serveur à partir de votre machine.
+
+\section{Méthode 2: Configuration sur chaque client}
+Lorsque vous entrez le nombre 2, vous réglerez l’heure de chaque machine, dont l'adresse IP se trouve dans le fichier \textbf{ipAdresses}, grâce au «\textbf{Cron}».
+
+% Explications du TimeSetup.py-----------------------------------------------------
+\chapter{
+  \title{Explications du fichier TimeSetup.py}
+}
+Dans cette section, nous expliquerons les variables et les fonctions du fichier \textbf{TimeSetup.py}.
+
+\subsubsection{Les variables globales}
+		\begin{itemize}
+			\item $username$ : représente le nom de l'utilisateur
+			\item $password$ : représente le mot de passe de l'utilisateur
+			\item $root\_Password$ : représente le mot de passe du SuperUser
+			\item $filepath$ : représente un fichier avec une liste d'adresse IP 
+			\item $heure$ : représente l'heure retourner par la méthode setupTime()
+		\end{itemize}
+		
+\subsubsection{La fonction setupTime()}
+Cette fonction permet de récuperer l'heure local via le protocole NTP.
+\subsubsection{La fonction broadcast()}
+Cette fonction récupere les différentes adresses IP du fichier \textbf{ipAdresses}.\\
+Ensuite elle essaye d'établirune connexion avec les machines grâce au protocole de communication SSH. Une fois la connexion établie, elle lance des commandes permettant de synchroniser l'heure sur les machines.\\
+Pour chaque machine, si la connexion a pu être établie et que la synchronisation a bien été éffectué alors un message de confirmation est affiché sinon un message d'erreur apparait expliquant que la connexion a échoué.
+\subsubsection{La fonction displayText()}
+Cette fonction affiche le nom du projet avec style.
+\subsubsection{La fonction main()}
+Cette fonction  demande à l'utlisateur quel méthode il souhaite utiliser.
+	
+
+% Conclusion-----------------------------------------------------
+\chapter{
+  \title{Conclusion}
+}
+
+\end{document}

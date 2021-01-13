@@ -1,0 +1,39 @@
+# !/bin/bash
+
+# Etape 1. Installation pyenv
+
+    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+    echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
+    source ~/.bashrc
+
+# Etape 2. Installation des packages manquants pour tous les modules Python
+    
+    sudo zypper install gcc
+    
+    sudo zypper install readline-devel sqlite3-devel libbz2-devel zlib-devel libopenssl-devel libffi-devel
+
+# Etape 3. Installation de la version du Python désiré 
+
+    pyenv install 3.6.3
+
+# Etape 4. Installation de virtualenv
+
+    sudo zypper install python3-virtualenv
+
+# Etape 5. Création d'un environnement virtuel pour l'installion de Python 
+
+    mkdir ~/pythonsProjet-SysG5_TimeSetup
+    virtualenv -p ~/.pyenv/versions/3.6.3/bin/python3.6 ~/pythonsProjet-SysG5_TimeSetup/python3.6.3
+    source ~/pythonsProjet-SysG5_TimeSetup/python3.6.3/bin/activate
+
+# Etape 6. Installation des packages Python nécessaires
+
+    python -m pip install --upgrade pip
+    python -m pip install paramiko
+    python -m pip install termcolor
+    python -m pip install ntplib
+    python -m pip install progressbar
+    python -m pip install scp
+
